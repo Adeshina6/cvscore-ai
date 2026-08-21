@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /thank-you.html
+Disallow: /auth/
+Disallow: /dashboard/
+Disallow: /api/
+
+Sitemap: https://cvscore.ai/sitemap.xml
