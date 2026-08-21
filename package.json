@@ -1,0 +1,15 @@
+{
+  "name": "cvscore-ai",
+  "version": "1.0.0",
+  "description": "CVScore AI — Free ATS Resume Checker",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "dev": "netlify dev",
+    "deploy": "netlify deploy --prod"
+  },
+  "devDependencies": {
+    "netlify-cli": "^17.0.0"
+  }
+}
