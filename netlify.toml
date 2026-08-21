@@ -2,31 +2,24 @@
   publish = "."
   functions = "netlify/functions"
 
-# Route /api/* to serverless functions
+[functions]
+  node_bundler = "esbuild"
+
+# Route /api/scan to the serverless function
 [[redirects]]
   from   = "/api/scan"
   to     = "/.netlify/functions/scan"
   status = 200
 
-# Custom 404 page
-[[redirects]]
-  from   = "/*"
-  to     = "/404.html"
-  status = 404
-
-[functions]
-  node_bundler = "esbuild"
-
-# Security headers
+# Security headers on all pages
 [[headers]]
   for = "/*"
   [headers.values]
     X-Frame-Options        = "DENY"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy        = "strict-origin-when-cross-origin"
-    Permissions-Policy     = "camera=(), microphone=(), geolocation=()"
 
-# Cache static assets
+# Cache CSS and JS aggressively
 [[headers]]
   for = "/shared.css"
   [headers.values]
@@ -37,7 +30,7 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
-# Never cache HTML
+# Never cache HTML pages
 [[headers]]
   for = "/*.html"
   [headers.values]
