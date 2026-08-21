@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CVScore AI — Free ATS Resume Checker That Actually Works</title>
+<meta name="description" content="Upload your CV and get an instant ATS score, missing keyword analysis, and AI-powered rewrites in under 60 seconds. No signup required to scan.">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="CVScore AI — Free ATS Resume Checker">
+<meta property="og:description" content="See exactly why your resume gets filtered out — and fix it before you apply.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shared.css">
+<style>
+/* ── HERO ── */
+.hero {
+  padding: 5.5rem 2rem 4rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero-glow {
+  position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse 70% 55% at 50% -5%, var(--glow) 0%, transparent 65%);
+}
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: .3rem .85rem .3rem .5rem;
+  background: var(--chip-bg); border: 1px solid var(--chip-border);
+  border-radius: 100px; font-size: .75rem; font-weight: 600;
+  color: var(--accent); letter-spacing: .03em;
+  margin-bottom: 1.5rem;
+}
+.eyebrow-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--accent); flex-shrink: 0;
+  box-shadow: 0 0 6px var(--accent);
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+.hero h1 {
+  font-size: clamp(2.4rem, 5.5vw, 4rem);
+  font-weight: 700; line-height: 1.1;
+  letter-spacing: -.03em; margin-bottom: 1.25rem;
+  max-width: 720px; margin-left: auto; margin-right: auto;
+}
+.hero h1 em {
+  font-style: normal;
+  color: var(--accent);
+  position: relative;
+}
+.hero-sub {
+  font-size: 1.1rem; color: var(--text-2);
+  max-width: 500px; margin: 0 auto 2.25rem;
+  line-height: 1.7; font-weight: 400;
+}
+.cta-row {
+  display: flex; align-items: center; justify-content: center;
+  gap: .75rem; flex-wrap: wrap; margin-bottom: 2rem;
+}
+.trust-pills {
+  display: flex; align-items: center; justify-content: center;
+  gap: 1.25rem; flex-wrap: wrap;
+}
+.trust-pill {
+  display: flex; align-items: center; gap: 5px;
+  font-size: .8rem; color: var(--text-3); font-weight: 500;
+}
+.trust-pill svg { color: var(--green); flex-shrink: 0; }
+
+/* ── UPLOAD WIDGET ── */
+.upload-zone {
+  max-width: 620px; margin: 3rem auto 0;
+  border: 2px dashed var(--border-strong);
+  border-radius: 16px; padding: 2.5rem;
+  text-align: center; cursor: pointer;
+  transition: border-color .2s, background .2s;
+  background: var(--surface);
+  position: relative;
+}
+.upload-zone:hover, .upload-zone.drag {
+  border-color: var(--accent);
+  background: var(--accent-tint);
+}
+.upload-icon {
+  width: 52px; height: 52px; border-radius: 14px;
+  background: var(--accent-tint); border: 1px solid var(--accent-border);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 1rem; font-size: 1.4rem;
+}
+.upload-zone h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: .35rem; }
+.upload-zone p { font-size: .85rem; color: var(--text-3); margin-bottom: 1.25rem; }
+.upload-formats {
+  display: flex; align-items: center; justify-content: center; gap: .5rem;
+}
+.format-badge {
+  padding: .2rem .6rem; border-radius: 6px;
+  background: var(--bg-2); border: 1px solid var(--border);
+  font-size: .72rem; font-weight: 600; color: var(--text-2);
+  font-family: var(--mono); letter-spacing: .04em;
+}
+.upload-cta { margin-top: 1.25rem; }
+
+/* ── DEMO SCORE CARD ── */
+.demo-section {
+  padding: 5rem 2rem;
+  background: var(--bg-2);
+  border-top: 1px solid var(--border);
+}
+.demo-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+  max-width: 900px; margin: 0 auto;
+  align-items: start;
+}
+.demo-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 16px; overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+.demo-card-header {
+  padding: .75rem 1.25rem;
+  background: var(--bg-2); border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: .6rem;
+}
+.demo-dots { display: flex; gap: 5px; }
+.demo-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+}
+.demo-dot:nth-child(1) { background: #ff5f57; }
+.demo-dot:nth-child(2) { background: #ffbd2e; }
+.demo-dot:nth-child(3) { background: #28c840; }
+.demo-filename { font-size: .78rem; color: var(--text-3); font-family: var(--mono); margin-left: 6px; }
+.demo-card-body { padding: 1.5rem; }
+
+.score-dial-wrap { text-align: center; margin-bottom: 1.5rem; }
+.score-dial { position: relative; display: inline-block; }
+.score-dial svg { transform: rotate(-90deg); }
+.score-dial-num {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  transform: none;
+}
+.score-val { font-size: 2.2rem; font-weight: 700; letter-spacing: -.04em; line-height: 1; }
+.score-lbl { font-size: .72rem; color: var(--text-3); font-weight: 500; margin-top: 2px; }
+.score-status {
+  display: inline-block; padding: .2rem .7rem;
+  border-radius: 100px; font-size: .75rem; font-weight: 600;
+  background: var(--green-tint); color: var(--green);
+  margin-top: .5rem; border: 1px solid var(--green-border);
+}
+
+.bar-list { display: flex; flex-direction: column; gap: .7rem; }
+.bar-row { display: grid; grid-template-columns: 110px 1fr 36px; align-items: center; gap: 8px; }
+.bar-label { font-size: .78rem; color: var(--text-2); font-weight: 500; }
+.bar-track { height: 6px; background: var(--bg-2); border-radius: 3px; overflow: hidden; border: 1px solid var(--border); }
+.bar-fill { height: 100%; border-radius: 3px; background: var(--accent); transition: width 1.2s cubic-bezier(.16,1,.3,1); }
+.bar-pct { font-size: .75rem; color: var(--text-3); text-align: right; font-family: var(--mono); }
+
+.kw-section { margin-top: 1.25rem; }
+.kw-label { font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .09em; color: var(--text-3); margin-bottom: .6rem; }
+.kw-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.kw-chip {
+  padding: .22rem .65rem; border-radius: 6px;
+  font-size: .73rem; font-weight: 600; font-family: var(--mono);
+  background: var(--red-tint); color: var(--red); border: 1px solid var(--red-border);
+}
+.kw-chip::before { content: '+ '; opacity: .6; }
+
+/* issues list */
+.issues-list { display: flex; flex-direction: column; gap: .65rem; }
+.issue-item {
+  display: flex; gap: .75rem; align-items: flex-start;
+  padding: .8rem; border-radius: 10px;
+  background: var(--bg-2); border: 1px solid var(--border);
+  font-size: .82rem;
+}
+.issue-icon { flex-shrink: 0; margin-top: 1px; font-size: .9rem; }
+.issue-text { color: var(--text-2); line-height: 1.5; }
+.issue-text strong { color: var(--text-1); font-weight: 600; }
+
+/* ── FEATURES ── */
+.features { padding: 5rem 2rem; border-top: 1px solid var(--border); }
+.features-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1px; background: var(--border);
+  border: 1px solid var(--border); border-radius: 16px; overflow: hidden;
+  margin-top: 3rem;
+}
+.feat-card {
+  background: var(--surface); padding: 1.75rem;
+  transition: background .15s;
+}
+.feat-card:hover { background: var(--bg-2); }
+.feat-num {
+  font-size: .7rem; font-weight: 700; color: var(--accent);
+  font-family: var(--mono); letter-spacing: .08em; margin-bottom: .75rem; display: block;
+}
+.feat-title { font-size: .95rem; font-weight: 600; margin-bottom: .4rem; }
+.feat-desc { font-size: .83rem; color: var(--text-2); line-height: 1.65; }
+
+/* ── HOW IT WORKS ── */
+.workflow { padding: 5rem 2rem; background: var(--bg-2); border-top: 1px solid var(--border); }
+.steps { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 1.5rem; margin-top: 3rem; }
+.step {
+  position: relative; padding: 1.5rem;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+}
+.step-n {
+  width: 34px; height: 34px; border-radius: 8px;
+  background: var(--accent); color: #fff;
+  font-size: .8rem; font-weight: 700; font-family: var(--mono);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 1rem;
+}
+.step h3 { font-size: .92rem; font-weight: 600; margin-bottom: .35rem; }
+.step p { font-size: .82rem; color: var(--text-2); line-height: 1.6; }
+
+/* ── CHECKS ── */
+.checks { padding: 5rem 2rem; border-top: 1px solid var(--border); }
+.checks-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr));
+  gap: 1.25rem; margin-top: 3rem;
+}
+.check-card {
+  padding: 1.5rem; border-radius: 14px;
+  background: var(--surface); border: 1px solid var(--border);
+  transition: border-color .2s;
+}
+.check-card:hover { border-color: var(--accent-border); }
+.check-stripe {
+  width: 28px; height: 4px; border-radius: 2px;
+  background: var(--accent); margin-bottom: 1rem;
+}
+.check-card h3 { font-size: .92rem; font-weight: 600; margin-bottom: .35rem; }
+.check-card p { font-size: .82rem; color: var(--text-2); line-height: 1.65; }
+
+/* ── RESPONSE PROMISE ── */
+.promise {
+  padding: 5rem 2rem; background: var(--bg-2); border-top: 1px solid var(--border);
+  text-align: center;
+}
+.promise-card {
+  max-width: 680px; margin: 2rem auto 0;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 20px; padding: 2.5rem;
+  box-shadow: var(--shadow-md);
+}
+.promise-items {
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; margin-top: 2rem;
+}
+.promise-item { text-align: center; }
+.promise-num {
+  font-size: 2rem; font-weight: 700; color: var(--accent);
+  font-family: var(--mono); letter-spacing: -.04em; line-height: 1;
+}
+.promise-item p { font-size: .8rem; color: var(--text-2); margin-top: .25rem; line-height: 1.4; }
+
+/* ── CTA ABOVE FOLD (sticky) ── */
+.sticky-cta {
+  display: none;
+  position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
+  z-index: 200;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 100px; padding: .5rem .5rem .5rem 1.25rem;
+  box-shadow: var(--shadow-lg);
+  align-items: center; gap: .75rem;
+  white-space: nowrap;
+  backdrop-filter: blur(16px);
+}
+.sticky-cta.visible { display: flex; }
+.sticky-cta span { font-size: .85rem; font-weight: 500; color: var(--text-2); }
+
+/* ── FREE TOOLS ── */
+.tools { padding: 5rem 2rem; border-top: 1px solid var(--border); }
+.tools-list {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr));
+  gap: 1px; background: var(--border); border: 1px solid var(--border);
+  border-radius: 16px; overflow: hidden; margin-top: 3rem;
+}
+.tool-item {
+  background: var(--surface); padding: 1.25rem 1.5rem;
+  transition: background .15s; cursor: pointer;
+}
+.tool-item:hover { background: var(--bg-2); }
+.tool-item h3 { font-size: .88rem; font-weight: 600; margin-bottom: .25rem; }
+.tool-item p { font-size: .78rem; color: var(--text-2); line-height: 1.5; }
+.tool-arrow { color: var(--accent); font-size: .85rem; margin-top: .5rem; }
+
+/* ── SCAN PROGRESS ── */
+.scan-spinner {
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 3px solid var(--accent-border);
+  border-top-color: var(--accent);
+  animation: spin .8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.scan-progress-track {
+  height: 4px; background: var(--bg-2); border-radius: 2px;
+  overflow: hidden; margin: 1rem auto 0; max-width: 280px;
+  border: 1px solid var(--border);
+}
+.scan-progress-fill {
+  height: 100%; background: var(--accent); border-radius: 2px;
+  width: 0%; transition: width 2s ease;
+}
+
+/* ── RESULT ROWS ── */
+.result-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  margin-bottom: 2rem; gap: 1rem; flex-wrap: wrap;
+}
+.result-row {
+  display: flex; gap: .75rem; align-items: flex-start;
+  padding: .8rem; border-radius: 10px; font-size: .82rem;
+  margin-bottom: .55rem;
+}
+.result-row.green { background: var(--green-tint); border: 1px solid var(--green-border); }
+.result-row.amber { background: var(--amber-tint); border: 1px solid rgba(217,119,6,.2); }
+.result-icon { flex-shrink: 0; }
+.result-row span, .result-row div { color: var(--text-2); line-height: 1.5; }
+.result-row strong { color: var(--text-1); font-weight: 600; }
+
+/* ── TOP RECOMMENDATION ── */
+.top-rec {
+  background: var(--accent-tint); border: 1px solid var(--accent-border);
+  border-radius: 12px; padding: 1rem 1.25rem;
+}
+.top-rec-label { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--accent); margin-bottom: .35rem; }
+.top-rec-text { font-size: .85rem; color: var(--text-2); line-height: 1.6; }
+
+/* ── JD MATCH ── */
+.jd-match-box {
+  display: flex; align-items: flex-start; gap: 1rem;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; padding: 1.25rem 1.5rem;
+  margin-top: 2rem;
+}
+.jd-match-icon { font-size: 1.4rem; flex-shrink: 0; }
+.jd-match-title { font-size: .92rem; font-weight: 600; margin-bottom: .2rem; }
+.jd-match-sub { font-size: .8rem; color: var(--text-3); line-height: 1.55; }
+.jd-input-row {
+  display: flex; gap: .75rem; margin-top: .85rem; align-items: flex-start;
+  flex-wrap: wrap;
+}
+.jd-textarea {
+  flex: 1; min-width: 260px; padding: .75rem 1rem;
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: 10px; font-family: inherit; font-size: .85rem;
+  color: var(--text-1); resize: vertical; outline: none;
+  transition: border-color .15s; line-height: 1.55;
+}
+.jd-textarea:focus { border-color: var(--accent); }
+.jd-textarea::placeholder { color: var(--text-3); }
+.jd-result-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; padding: 1.25rem 1.5rem; margin-top: .85rem;
+}
+
+/* ── CTA BAND ── */
+.cta-band {
+  padding: 5rem 2rem; border-top: 1px solid var(--border);
+  text-align: center;
+  background: linear-gradient(to bottom, var(--surface), var(--bg));
+}
+.cta-band h2 { margin-bottom: 1rem; }
+.cta-band p { color: var(--text-2); margin-bottom: 2rem; max-width: 420px; margin-left: auto; margin-right: auto; }
+</style>
+</head>
+<body>
+
+<!-- STICKY BOTTOM CTA -->
+<div class="sticky-cta" id="stickyCta">
+  <span>Your resume — scored in 30 seconds</span>
+  <a href="#upload" class="btn btn-primary btn-sm">Scan free →</a>
+</div>
+
+<!-- NAV -->
+<nav class="nav" id="mainNav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">
+      <span class="brand-mark"></span>
+      CVScore AI
+    </a>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#workflow">How it works</a>
+      <a href="faq.html">FAQ</a>
+      <a href="#tools">Free tools</a>
+    </div>
+    <div class="nav-end">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      <a href="#upload" class="btn btn-primary btn-sm">Scan my CV</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="eyebrow">
+    <span class="eyebrow-dot"></span>
+    Free · No signup required
+  </div>
+  <h1>Your resume gets <em>filtered out</em><br>before humans read it</h1>
+  <p class="hero-sub">CVScore AI scans your CV the way real ATS software does — then shows you exactly what to fix to land more interviews.</p>
+  <div class="cta-row">
+    <a href="#upload" class="btn btn-primary btn-lg">Scan my resume free</a>
+    <a href="#demo" class="btn btn-ghost btn-lg">See a sample report</a>
+  </div>
+  <div class="trust-pills">
+    <div class="trust-pill">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      Results in under 60 seconds
+    </div>
+    <div class="trust-pill">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      PDF &amp; DOCX supported
+    </div>
+    <div class="trust-pill">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      No account needed to scan
+    </div>
+  </div>
+
+  <!-- UPLOAD ZONE -->
+  <div class="upload-zone" id="upload"
+    ondragover="this.classList.add('drag'); event.preventDefault();"
+    ondragleave="this.classList.remove('drag');"
+    ondrop="handleDrop(event);"
+    onclick="document.getElementById('fileInput').click()">
+    <input type="file" id="fileInput" accept=".pdf,.docx" style="display:none" onchange="handleFile(this)">
+    <div class="upload-icon">📄</div>
+    <h3>Drop your resume here</h3>
+    <p>Or click to browse files on your device</p>
+    <div class="upload-formats">
+      <span class="format-badge">PDF</span>
+      <span class="format-badge">DOCX</span>
+      <span style="font-size:.75rem; color:var(--text-3);">up to 5 MB</span>
+    </div>
+    <div class="upload-cta">
+      <button class="btn btn-primary">Choose file →</button>
+    </div>
+  </div>
+</section>
+
+<!-- DEMO SCAN RESULT -->
+<section class="demo-section" id="demo">
+  <div class="container">
+    <div class="section-label">Sample report</div>
+    <h2 class="section-h2">A breakdown in <span class="accent-text">seconds</span></h2>
+    <p class="section-sub">Every scan shows your score, what's working, what's missing, and the keywords standing between you and the shortlist.</p>
+    <div class="demo-grid">
+      <!-- Left: score card -->
+      <div class="demo-card">
+        <div class="demo-card-header">
+          <div class="demo-dots">
+            <div class="demo-dot"></div>
+            <div class="demo-dot"></div>
+            <div class="demo-dot"></div>
+          </div>
+          <span class="demo-filename">muhammed_cv_2026.pdf</span>
+        </div>
+        <div class="demo-card-body">
+          <div class="score-dial-wrap">
+            <div class="score-dial">
+              <svg width="120" height="120" viewBox="0 0 120 120">
+                <circle cx="60" cy="60" r="50" fill="none" stroke="var(--bg-2)" stroke-width="8"/>
+                <circle cx="60" cy="60" r="50" fill="none" stroke="var(--accent)" stroke-width="8"
+                  stroke-linecap="round"
+                  stroke-dasharray="314"
+                  stroke-dashoffset="44"
+                  style="transition: stroke-dashoffset 1.4s cubic-bezier(.16,1,.3,1)"/>
+              </svg>
+              <div class="score-dial-num">
+                <span class="score-val">86</span>
+                <span class="score-lbl">ATS Score</span>
+              </div>
+            </div>
+            <div><span class="score-status">Strong match</span></div>
+          </div>
+          <div class="bar-list">
+            <div class="bar-row">
+              <span class="bar-label">Keyword match</span>
+              <div class="bar-track"><div class="bar-fill" style="width:82%"></div></div>
+              <span class="bar-pct">82%</span>
+            </div>
+            <div class="bar-row">
+              <span class="bar-label">Formatting</span>
+              <div class="bar-track"><div class="bar-fill" style="width:95%"></div></div>
+              <span class="bar-pct">95%</span>
+            </div>
+            <div class="bar-row">
+              <span class="bar-label">Readability</span>
+              <div class="bar-track"><div class="bar-fill" style="width:78%"></div></div>
+              <span class="bar-pct">78%</span>
+            </div>
+            <div class="bar-row">
+              <span class="bar-label">Parseability</span>
+              <div class="bar-track"><div class="bar-fill" style="width:91%"></div></div>
+              <span class="bar-pct">91%</span>
+            </div>
+          </div>
+          <div class="kw-section">
+            <div class="kw-label">Missing keywords</div>
+            <div class="kw-chips">
+              <span class="kw-chip">Kubernetes</span>
+              <span class="kw-chip">GraphQL</span>
+              <span class="kw-chip">CI/CD</span>
+              <span class="kw-chip">Terraform</span>
+              <span class="kw-chip">Agile</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: issues -->
+      <div>
+        <div style="margin-bottom: .85rem;">
+          <div class="kw-label" style="color:var(--green); margin-bottom: .5rem;">✓ What's working</div>
+          <div class="issues-list">
+            <div class="issue-item">
+              <span class="issue-icon">✅</span>
+              <div class="issue-text"><strong>Clean single-column layout</strong> — ATS parsers read it without errors</div>
+            </div>
+            <div class="issue-item">
+              <span class="issue-icon">✅</span>
+              <div class="issue-text"><strong>Action verbs</strong> in 6 of 8 bullet points</div>
+            </div>
+            <div class="issue-item">
+              <span class="issue-icon">✅</span>
+              <div class="issue-text"><strong>Contact info</strong> correctly parsed in all fields</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="kw-label" style="color:var(--amber); margin-bottom: .5rem;">⚠ Needs attention</div>
+          <div class="issues-list">
+            <div class="issue-item">
+              <span class="issue-icon">⚡</span>
+              <div class="issue-text"><strong>5 keywords missing</strong> from job description: Kubernetes, CI/CD, GraphQL, Terraform, Agile</div>
+            </div>
+            <div class="issue-item">
+              <span class="issue-icon">⚡</span>
+              <div class="issue-text"><strong>2 bullets</strong> lack measurable outcomes — add numbers and percentages</div>
+            </div>
+            <div class="issue-item">
+              <span class="issue-icon">⚡</span>
+              <div class="issue-text"><strong>Skills section</strong> not aligned to target role requirements</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="container">
+    <div class="section-label">What's included</div>
+    <h2 class="section-h2">Everything you need to get <span class="accent-text">hired</span></h2>
+    <p class="section-sub">One workspace to analyze, optimize, and track every version of your resume.</p>
+    <div class="features-grid">
+      <div class="feat-card">
+        <span class="feat-num">01</span>
+        <div class="feat-title">ATS Resume Checker</div>
+        <div class="feat-desc">Upload a PDF or DOCX and get a 0–100 compatibility score with a plain-English strengths and weaknesses report.</div>
+      </div>
+      <div class="feat-card">
+        <span class="feat-num">02</span>
+        <div class="feat-title">Job Description Matching</div>
+        <div class="feat-desc">Paste any job posting and instantly see your keyword match rate and exactly which terms are missing.</div>
+      </div>
+      <div class="feat-card">
+        <span class="feat-num">03</span>
+        <div class="feat-title">AI Resume Rewriter</div>
+        <div class="feat-desc">Rewrite bullet points with stronger action verbs and measurable achievements. You review every change before saving.</div>
+      </div>
+      <div class="feat-card">
+        <span class="feat-num">04</span>
+        <div class="feat-title">Missing Skills Analysis</div>
+        <div class="feat-desc">Gaps grouped by category: technical skills, soft skills, certifications, and tools — mapped to your target role.</div>
+      </div>
+      <div class="feat-card">
+        <span class="feat-num">05</span>
+        <div class="feat-title">ATS-Friendly Export</div>
+        <div class="feat-desc">Download a clean, parser-safe DOCX or PDF version of your resume in one click — no formatting accidents.</div>
+      </div>
+      <div class="feat-card">
+        <span class="feat-num">06</span>
+        <div class="feat-title">Score History Dashboard</div>
+        <div class="feat-desc">Save every scan, track your ATS score across versions, and see your progress over time in one view.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="workflow" id="workflow">
+  <div class="container">
+    <div class="section-label">How it works</div>
+    <h2 class="section-h2">From upload to <span class="accent-text">interview-ready</span></h2>
+    <p class="section-sub">Four steps. A few minutes. A significantly better resume.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-n">01</div>
+        <h3>Upload your resume</h3>
+        <p>Drop a PDF or DOCX. We parse the content exactly like a real ATS — extracting every section and data point.</p>
+      </div>
+      <div class="step">
+        <div class="step-n">02</div>
+        <h3>Add a job description</h3>
+        <p>Paste the role you want. We compare it line-by-line for keyword fit and requirements coverage.</p>
+      </div>
+      <div class="step">
+        <div class="step-n">03</div>
+        <h3>Optimize with AI</h3>
+        <p>Apply rewrite suggestions to fill skill gaps and boost your score — without changing your actual experience.</p>
+      </div>
+      <div class="step">
+        <div class="step-n">04</div>
+        <h3>Export and apply</h3>
+        <p>Download an ATS-safe version and track improvement across every version of your resume.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT WE CHECK -->
+<section class="checks" id="checks">
+  <div class="container">
+    <div class="section-label">Transparency</div>
+    <h2 class="section-h2">No black box — <span class="accent-text">here's what we check</span></h2>
+    <p class="section-sub">Six specific things every scan evaluates and reports back to you, with no guesswork.</p>
+    <div class="checks-grid">
+      <div class="check-card">
+        <div class="check-stripe"></div>
+        <h3>Parseability</h3>
+        <p>Can an ATS extract your contact info, work history, education, and skills? We parse your file the same way and flag anything that gets lost.</p>
+      </div>
+      <div class="check-card">
+        <div class="check-stripe"></div>
+        <h3>Formatting</h3>
+        <p>Multi-column layouts, tables, text boxes, and graphics break most ATS parsers. We identify the specific issues in your file.</p>
+      </div>
+      <div class="check-card">
+        <div class="check-stripe"></div>
+        <h3>Keyword match</h3>
+        <p>Paste a job description and we compare it against your resume line by line — showing exactly which required terms are absent.</p>
+      </div>
+      <div class="check-card">
+        <div class="check-stripe"></div>
+        <h3>Readability</h3>
+        <p>Weak verbs, vague bullets, and missing measurable outcomes reduce your impact. Each bullet gets reviewed individually.</p>
+      </div>
+      <div class="check-card">
+        <div class="check-stripe"></div>
+        <h3>Skills alignment</h3>
+        <p>Gaps between your skills section and the target role, grouped by technical skills, soft skills, certifications, and tools.</p>
+      </div>
+      <div class="check-card">
+        <div class="check-stripe"></div>
+        <h3>0–100 composite score</h3>
+        <p>All six dimensions roll into one score with a full breakdown, saved to your dashboard so you can track progress between versions.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESPONSE TIME PROMISE -->
+<section class="promise">
+  <div class="container">
+    <div class="section-label">Our commitment</div>
+    <h2 class="section-h2">Speed you can count on</h2>
+    <p class="section-sub">We built CVScore AI because waiting 10 minutes for a resume scan is unacceptable when you have applications to send.</p>
+    <div class="promise-card">
+      <div class="promise-items">
+        <div class="promise-item">
+          <div class="promise-num">&lt;30s</div>
+          <p>ATS scan complete from upload to score</p>
+        </div>
+        <div class="promise-item">
+          <div class="promise-num">&lt;60s</div>
+          <p>Full keyword + formatting report generated</p>
+        </div>
+        <div class="promise-item">
+          <div class="promise-num">100%</div>
+          <p>Results reviewed before you export anything</p>
+        </div>
+      </div>
+      <p style="font-size:.82rem; color:var(--text-3); margin-top:1.5rem; padding-top:1.25rem; border-top:1px solid var(--border);">
+        If your scan takes longer than 60 seconds, we'll refund your credit — no questions asked.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- FREE TOOLS -->
+<section class="tools" id="tools">
+  <div class="container">
+    <div class="section-label">Free tools</div>
+    <h2 class="section-h2">Try free — no account needed</h2>
+    <p class="section-sub">Six standalone tools you can use right now, then continue deeper in the app.</p>
+    <div class="tools-list">
+      <div class="tool-item">
+        <h3>ATS Resume Checker</h3>
+        <p>Upload or paste your resume to surface score gaps, missing keywords, and formatting issues against a job description.</p>
+        <div class="tool-arrow">→</div>
+      </div>
+      <div class="tool-item">
+        <h3>Resume Keyword Scanner</h3>
+        <p>Paste a job description and extract every keyword your resume should include to pass automated filters.</p>
+        <div class="tool-arrow">→</div>
+      </div>
+      <div class="tool-item">
+        <h3>Job Description Match</h3>
+        <p>Compare your resume against any posting and see which responsibilities, tools, and skills are absent.</p>
+        <div class="tool-arrow">→</div>
+      </div>
+      <div class="tool-item">
+        <h3>AI Resume Rewriter</h3>
+        <p>Turn weak bullet points into stronger, ATS-friendly achievements with clearer verbs and measurable impact.</p>
+        <div class="tool-arrow">→</div>
+      </div>
+      <div class="tool-item">
+        <h3>Cover Letter Generator</h3>
+        <p>Generate a targeted cover letter outline that matches job, company, and role keywords — without sounding generic.</p>
+        <div class="tool-arrow">→</div>
+      </div>
+      <div class="tool-item">
+        <h3>LinkedIn to Resume</h3>
+        <p>Convert a LinkedIn profile into a clean resume structure with ATS-safe formatting and stronger bullets.</p>
+        <div class="tool-arrow">→</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BAND -->
+<section class="cta-band">
+  <div class="container">
+    <div class="section-label">Get started</div>
+    <h2 class="section-h2">Ready to see your score?</h2>
+    <p>Upload your resume now and find out exactly why it's being filtered — then fix it.</p>
+    <a href="#upload" class="btn btn-primary btn-lg">Scan my resume free →</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-brand" style="margin-bottom:.75rem; display:inline-flex;">
+          <span class="brand-mark"></span>CVScore AI
+        </a>
+        <p>Resume tools that help you get seen by humans, not just filtered by machines.</p>
+        <div class="footer-social">
+          <a href="#">Twitter / X</a>
+          <a href="#">LinkedIn</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Free Tools</div>
+        <ul class="footer-links">
+          <li><a href="#">ATS Checker</a></li>
+          <li><a href="#">Keyword Scanner</a></li>
+          <li><a href="#">Job Match</a></li>
+          <li><a href="#">AI Rewriter</a></li>
+          <li><a href="#">Cover Letter</a></li>
+          <li><a href="#">LinkedIn → Resume</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Resources</div>
+        <ul class="footer-links">
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Resume by Job</a></li>
+          <li><a href="#">ATS Guide</a></li>
+          <li><a href="#">Format Guide 2026</a></li>
+          <li><a href="#">Keywords Guide</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Company</div>
+        <ul class="footer-links">
+          <li><a href="#">Create account</a></li>
+          <li><a href="#">Login</a></li>
+          <li><a href="#">Privacy</a></li>
+          <li><a href="#">Terms</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="disclaimer-box">
+      <strong>Disclaimer:</strong> CVScore AI is an AI-powered tool for informational purposes only. AI-generated content may contain errors and should be reviewed before use. We do not guarantee interview outcomes or employment.
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 CVScore AI. All rights reserved.</span>
+      <div class="footer-bottom-links">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="/shared.js"></script>
+<script>
+// ── STICKY CTA ──
+const stickyCta = document.getElementById('stickyCta');
+const hero = document.querySelector('.hero');
+window.addEventListener('scroll', () => {
+  const heroBottom = hero.getBoundingClientRect().bottom;
+  stickyCta.classList.toggle('visible', heroBottom < 0);
+}, { passive: true });
+
+// ── UPLOAD HANDLERS ──
+function handleDrop(e) {
+  e.preventDefault();
+  document.querySelector('.upload-zone').classList.remove('drag');
+  const file = e.dataTransfer.files[0];
+  if (file) processFile(file);
+}
+function handleFile(input) {
+  if (input.files[0]) processFile(input.files[0]);
+}
+
+// ── SCANNING STATES ──
+const scanningMessages = [
+  'Parsing document structure…',
+  'Checking ATS parseability…',
+  'Analysing keyword density…',
+  'Scoring formatting…',
+  'Running readability check…',
+  'Generating your full report…',
+];
+
+function showScanning(filename) {
+  const zone = document.querySelector('.upload-zone');
+  zone.style.cursor = 'default';
+  zone.onclick = null;
+  zone.innerHTML = `
+    <div class="upload-icon" style="background:var(--accent-tint);border-color:var(--accent-border)">
+      <div class="scan-spinner"></div>
+    </div>
+    <h3>Scanning <span style="color:var(--accent)">${filename}</span></h3>
+    <p id="scanMsg" style="color:var(--text-3);font-size:.83rem">Parsing document structure…</p>
+    <div class="scan-progress-track">
+      <div class="scan-progress-fill" id="scanFill"></div>
+    </div>
+    <p style="font-size:.75rem;color:var(--text-3);margin-top:.75rem">Powered by Claude AI · Usually under 30 seconds</p>
+  `;
+
+  // Cycle through messages while waiting
+  let msgIdx = 0;
+  const msgEl = document.getElementById('scanMsg');
+  const fillEl = document.getElementById('scanFill');
+  return setInterval(() => {
+    msgIdx = (msgIdx + 1) % scanningMessages.length;
+    if (msgEl) msgEl.textContent = scanningMessages[msgIdx];
+    if (fillEl) fillEl.style.width = `${Math.min(90, (msgIdx + 1) * 15)}%`;
+  }, 2200);
+}
+
+// ── REAL CLAUDE API SCAN ──
+async function processFile(file) {
+  // Validate
+  const allowed = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+  if (!allowed.includes(file.type) && !file.name.match(/\.(pdf|docx)$/i)) {
+    alert('Please upload a PDF or DOCX file.');
+    return;
+  }
+  if (file.size > 5 * 1024 * 1024) {
+    alert('File must be under 5 MB.');
+    return;
+  }
+
+  const ticker = showScanning(file.name);
+
+  try {
+    // Read file as base64
+    const base64 = await fileToBase64(file);
+    const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+
+    const response = await fetch('/api/scan', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        mode: 'scan',
+        base64,
+        mimeType: isPdf ? 'application/pdf' : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        filename: file.name
+      })
+    });
+
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}));
+      throw new Error(err.error || `Server error: ${response.status}`);
+    }
+
+    const report = await response.json();
+
+    clearInterval(ticker);
+    renderResults(report, file.name);
+
+  } catch (err) {
+    clearInterval(ticker);
+    console.error(err);
+    showError(err.message);
+  }
+}
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result.split(',')[1]);
+    reader.onerror = () => reject(new Error('Failed to read file'));
+    reader.readAsDataURL(file);
+  });
+}
+
+function showError(msg) {
+  const zone = document.querySelector('.upload-zone');
+  zone.innerHTML = `
+    <div class="upload-icon" style="background:var(--red-tint);border-color:var(--red-border)">⚠️</div>
+    <h3 style="color:var(--red)">Scan failed</h3>
+    <p style="color:var(--text-3);font-size:.83rem;margin-bottom:1rem">${msg}</p>
+    <button class="btn btn-ghost btn-sm" onclick="location.reload()">Try again</button>
+  `;
+}
+
+// ── RENDER REAL RESULTS ──
+function renderResults(r, filename) {
+  const gradeColor = {
+    'Weak': 'var(--red)', 'Fair': 'var(--amber)',
+    'Good': 'var(--amber)', 'Strong': 'var(--green)', 'Excellent': 'var(--green)'
+  }[r.grade] || 'var(--accent)';
+
+  const barColor = (v) => v >= 80 ? 'var(--green)' : v >= 60 ? 'var(--amber)' : 'var(--red)';
+
+  const scorePercent = (2 * Math.PI * 50) - (2 * Math.PI * 50 * r.overallScore / 100);
+
+  const strengthsHTML = (r.strengths || []).map(s => `
+    <div class="result-row green">
+      <span class="result-icon">✅</span>
+      <span>${s}</span>
+    </div>`).join('');
+
+  const issuesHTML = (r.issues || []).map(i => `
+    <div class="result-row amber">
+      <span class="result-icon">⚡</span>
+      <div><strong>${i.title}</strong><br><span style="color:var(--text-3);font-size:.8rem">${i.detail}</span></div>
+    </div>`).join('');
+
+  const kwHTML = (r.missingKeywords || []).map(k =>
+    `<span class="kw-chip">${k}</span>`).join('');
+
+  const barsHTML = [
+    ['Parseability',   r.scores.parseability],
+    ['Formatting',     r.scores.formatting],
+    ['Keywords',       r.scores.keywordDensity],
+    ['Readability',    r.scores.readability],
+    ['Skills align',   r.scores.skillsAlignment],
+  ].map(([label, val]) => `
+    <div class="bar-row">
+      <span class="bar-label">${label}</span>
+      <div class="bar-track"><div class="bar-fill" style="width:${val}%;background:${barColor(val)}"></div></div>
+      <span class="bar-pct">${val}%</span>
+    </div>`).join('');
+
+  // Replace the entire demo section content
+  const demoSection = document.getElementById('demo');
+  demoSection.innerHTML = `
+    <div class="container">
+      <div class="result-header">
+        <div>
+          <div class="section-label">Your ATS Report</div>
+          <h2 class="section-h2" style="margin-bottom:.5rem">
+            <span style="color:${gradeColor}">${r.grade} match</span> — ${r.overallScore}/100
+          </h2>
+          <p style="font-size:.85rem;color:var(--text-3);font-family:var(--mono)">${filename}</p>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="resetUpload()" style="flex-shrink:0">
+          ↩ Scan another
+        </button>
+      </div>
+
+      <div class="demo-grid">
+        <!-- Score card -->
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <div class="demo-dots">
+              <div class="demo-dot"></div><div class="demo-dot"></div><div class="demo-dot"></div>
+            </div>
+            <span class="demo-filename">${filename}</span>
+          </div>
+          <div class="demo-card-body">
+            <div class="score-dial-wrap">
+              <div class="score-dial">
+                <svg width="120" height="120" viewBox="0 0 120 120">
+                  <circle cx="60" cy="60" r="50" fill="none" stroke="var(--bg-2)" stroke-width="8"/>
+                  <circle cx="60" cy="60" r="50" fill="none" stroke="${gradeColor}" stroke-width="8"
+                    stroke-linecap="round" stroke-dasharray="314"
+                    stroke-dashoffset="${scorePercent}"
+                    style="transform:rotate(-90deg);transform-origin:60px 60px;transition:stroke-dashoffset 1.4s cubic-bezier(.16,1,.3,1)"/>
+                </svg>
+                <div class="score-dial-num">
+                  <span class="score-val" style="color:${gradeColor}">${r.overallScore}</span>
+                  <span class="score-lbl">ATS Score</span>
+                </div>
+              </div>
+              <div><span class="score-status" style="background:${gradeColor}18;color:${gradeColor};border-color:${gradeColor}40">${r.grade}</span></div>
+            </div>
+            <div class="bar-list">${barsHTML}</div>
+            ${r.missingKeywords?.length ? `
+            <div class="kw-section">
+              <div class="kw-label">Missing keywords</div>
+              <div class="kw-chips">${kwHTML}</div>
+            </div>` : ''}
+          </div>
+        </div>
+
+        <!-- Issues & strengths -->
+        <div>
+          <div style="margin-bottom:.85rem;">
+            <div class="kw-label" style="color:var(--green);margin-bottom:.5rem">✓ What's working</div>
+            <div class="issues-list">${strengthsHTML}</div>
+          </div>
+          <div style="margin-bottom:1.5rem;">
+            <div class="kw-label" style="color:var(--amber);margin-bottom:.5rem">⚠ Needs attention</div>
+            <div class="issues-list">${issuesHTML}</div>
+          </div>
+          ${r.topRecommendation ? `
+          <div class="top-rec">
+            <div class="top-rec-label">🎯 Top recommendation</div>
+            <div class="top-rec-text">${r.topRecommendation}</div>
+          </div>` : ''}
+          <div style="margin-top:1.25rem;display:flex;gap:.75rem;flex-wrap:wrap;">
+            <a href="#upload" class="btn btn-primary btn-sm" onclick="resetUpload()">Scan another CV</a>
+            <a href="faq.html" class="btn btn-ghost btn-sm">How to improve →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Job description match box -->
+      <div class="jd-match-box">
+        <div class="jd-match-icon">🎯</div>
+        <div>
+          <div class="jd-match-title">Get a job-specific keyword match score</div>
+          <div class="jd-match-sub">Paste a job description below and we'll compare it against your resume to show exactly which required terms are missing.</div>
+        </div>
+      </div>
+      <div class="jd-input-row">
+        <textarea id="jdInput" class="jd-textarea" placeholder="Paste the job description here…" rows="5"></textarea>
+        <button class="btn btn-primary btn-md" onclick="runJobMatch()">Match against JD →</button>
+      </div>
+      <div id="jdResults"></div>
+    </div>
+  `;
+
+  // Scroll to results
+  setTimeout(() => demoSection.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+}
+
+function resetUpload() {
+  const zone = document.querySelector('.upload-zone');
+  if (!zone) {
+    window.location.reload();
+    return;
+  }
+  zone.style.cursor = 'pointer';
+  zone.onclick = () => document.getElementById('fileInput').click();
+  zone.innerHTML = `
+    <input type="file" id="fileInput" accept=".pdf,.docx" style="display:none" onchange="handleFile(this)">
+    <div class="upload-icon">📄</div>
+    <h3>Drop your resume here</h3>
+    <p>Or click to browse files on your device</p>
+    <div class="upload-formats">
+      <span class="format-badge">PDF</span>
+      <span class="format-badge">DOCX</span>
+      <span style="font-size:.75rem;color:var(--text-3)">up to 5 MB</span>
+    </div>
+    <div class="upload-cta">
+      <button class="btn btn-primary">Choose file →</button>
+    </div>
+  `;
+}
+
+// ── JD MATCH ──
+let lastFileBase64 = null;
+async function runJobMatch() {
+  const jd = document.getElementById('jdInput')?.value?.trim();
+  if (!jd || jd.length < 50) {
+    alert('Please paste a job description (at least 50 characters).');
+    return;
+  }
+  const btn = document.querySelector('[onclick="runJobMatch()"]');
+  btn.textContent = 'Analysing…'; btn.disabled = true;
+
+  try {
+    const response = await fetch('/api/scan', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ mode: 'jdmatch', jobDescription: jd })
+    });
+
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}));
+      throw new Error(err.error || `Server error: ${response.status}`);
+    }
+
+    const jdData = await response.json();
+    renderJdResults(jdData);
+  } catch (e) {
+    document.getElementById('jdResults').innerHTML = `<p style="color:var(--red);font-size:.85rem;margin-top:.75rem">Analysis failed: ${e.message}</p>`;
+  } finally {
+    btn.textContent = 'Match against JD →'; btn.disabled = false;
+  }
+}
+
+function renderJdResults(d) {
+  const kwAll = (d.requiredKeywords || []).map(k =>
+    `<span class="kw-chip" style="background:var(--green-tint);color:var(--green);border-color:var(--green-border)">${k}</span>`).join('');
+  const kwMissing = (d.missingFromTypicalCV || []).map(k =>
+    `<span class="kw-chip">${k}</span>`).join('');
+  document.getElementById('jdResults').innerHTML = `
+    <div class="jd-result-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+        <div style="font-size:.88rem;font-weight:600">Role detected: <span style="color:var(--accent)">${d.roleTitle || 'Unknown'}</span></div>
+        <div style="font-size:1.1rem;font-weight:700;font-family:var(--mono);color:var(--accent)">${d.matchScore}% match</div>
+      </div>
+      <div class="kw-label" style="margin-bottom:.5rem">Required keywords (from JD)</div>
+      <div class="kw-chips" style="margin-bottom:1rem">${kwAll}</div>
+      <div class="kw-label" style="color:var(--red);margin-bottom:.5rem">Commonly missing from CVs</div>
+      <div class="kw-chips">${kwMissing}</div>
+    </div>
+  `;
+}
+</script>
+</body>
+</html>
